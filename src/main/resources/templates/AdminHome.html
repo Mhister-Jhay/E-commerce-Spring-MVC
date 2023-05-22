@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="utf-8">
+    <title>Jhay Commerce</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <!-- Include SweetAlert CSS and JS files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
+    <!-- Libraries Stylesheet -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/lib/animate/animate.min.css}">
+    <link rel="stylesheet" th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}">
+</head>
+
+<body th:object="${AdminStatus}">
+<!-- Topbar Start -->
+<div class="container-fluid bg-dark mb-30">
+    <div class="row px-xl-5">
+        <div class="col-lg-9">
+            <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse1">
+                    <div class="btn-group">
+                        <a th:href="@{/logout}">
+                            <button type="button" class="nav-link">Logout</button>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="row align-items-center justify-content-center bg-light py-3 px-xl-5 d-none d-lg-flex">
+        <a th:href="@{/admin}" class="text-decoration-none">
+            <span class="h1 text-uppercase text-primary bg-dark px-2">Jhay</span>
+            <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Commerce</span>
+            <span class="h1 text-uppercase text-primary bg-dark px-2">Admin</span>
+        </a>
+    </div>
+</div>
+<!-- Topbar End -->
+
+<!-- Navbar Start -->
+<div class="container-fluid bg-dark mb-30">
+    <div class="row px-xl-5">
+        <div class="col-lg-9">
+            <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
+                <a th:href="@{/admin}" class="text-decoration-none d-block d-lg-none">
+                    <span class="h1 text-uppercase text-dark bg-light px-2">Jhay</span>
+                    <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Commerce</span>
+                    <span class="h1 text-uppercase text-dark bg-light px-2">Admin</span>
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                    <div class="navbar-nav mr-auto py-0">
+                        <a th:href="@{/home}" class="nav-item nav-link">Home</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Navbar End -->
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb align-items-center bg-light mb-30">
+                <h5 class="font-weight-semi-bold m-0">Edit/Delete Product</h5>
+            </nav>
+        </div>
+    </div>
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <form method="post" th:action="@{/searchProduct}" class="form-inline">
+                <div class="input-group">
+                    <label>
+                        <input type="number" name="id" placeholder="Enter Product ID" th:value="${product_id}" class="form-control">
+                    </label>
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<br>
+<div th:if="${searchedProduct != null}" th:object="${searchedProduct}" class="container-fluid my-5">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <table class="table table-light table-borderless table-hover text-center mb-0">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Product Id</th>
+                    <th>Product Image</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Product Category</th>
+                    <th>Quantity</th>
+                    <th>Delete Product</th>
+                </tr>
+                </thead>
+                <tbody class="align-middle">
+                <tr>
+                    <td class="align-middle" th:text="${searchedProduct.getId()}"></td>
+                    <td class="align-middle"><img th:src="@{/product/image/{id}(id=${searchedProduct.getId()})}" style="width: 50px;"></td>
+                    <td class="align-middle" th:text="${searchedProduct.getName()}"></td>
+                    <form th:action="@{/updatePrice}" method="post" th:object="${searchedProduct}">
+                        <td class="align-middle">
+                            <label>
+                                <input type="hidden" name="id" th:value="*{id}">
+                                <input type="number" name="price" th:value="*{price}" placeholder="Enter Price" class="form-control form-control-sm bg-secondary2 border-0 text-center">
+                            </label>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-sm btn-primary">Update Price</button>
+                            </div>
+                        </td>
+                    </form>
+                    <td class="align-middle" th:text="${searchedProduct.getProductCategory()}"></td>
+                    <form th:action="@{/updateQuantity}" method="post" th:object="${searchedProduct}">
+                        <td class="align-middle">
+                            <label>
+                                <input type="hidden" name="id" th:value="*{id}">
+                                <input type="number" name="quantity" th:value="*{quantity}" placeholder="Enter Quantity" class="form-control form-control-sm bg-secondary2 border-0 text-center">
+                            </label>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-sm btn-primary">Update Quantity</button>
+                            </div>
+                        </td>
+                    </form>
+                    <form th:action="@{/deleteProduct}" method="post" th:object="${searchedProduct}">
+                        <td class="align-middle">
+                            <input type="hidden" name="id" th:value="*{id}">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
+                    </form>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Products End -->
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb align-items-center bg-light mb-30">
+                <h5 class="font-weight-semi-bold m-0">Add Product</h5>
+            </nav>
+        </div>
+    </div>
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <table class="table table-light table-borderless table-hover text-center mb-0">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Image</th>
+                    <th>Add Product</th>
+                </tr>
+                </thead>
+                <tbody>
+                <form method="post" th:action="@{/addProduct}" th:object="${productForm}" enctype="multipart/form-data">
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="text" class="form-control form-control-sm bg-secondary2 border-0 text-center"
+                                       name="name" placeholder="Product Name" th:field="*{name}">
+                            </label>
+                        </td>
+                        <td>
+                            <label for="productCategory"></label>
+                            <select th:field="*{productCategory}" name="productCategory" id="productCategory">
+                                <option th:each="category : ${T(com.task.enums.ProductCategory).values()}"
+                                        th:value="${category}" th:text="${category.name()}"></option>
+                            </select>
+                        </td>
+                        <td>
+                            <label>
+                                <input type="number" class="form-control form-control-sm bg-secondary2 border-0 text-center"
+                                       name="price" placeholder="Price" th:field="*{price}">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input type="number" class="form-control form-control-sm bg-secondary2 border-0 text-center"
+                                       name="quantity" placeholder="Quantity" th:field="*{quantity}">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input type="file" class="form-control form-control-sm bg-secondary2 border-0 text-center"
+                                       name="image" placeholder="Image" th:field="*{image}">
+                            </label>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-sm btn-primary">Add Product</button>
+                        </td>
+                    </tr>
+                </form>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<br>
+<!-- Breadcrumb End -->
+
+<div class="container-fluid" th:if="${productList != null}">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb align-items-center bg-light mb-30">
+                <h5 class="font-weight-semi-bold m-0">Products</h5>
+            </nav>
+        </div>
+    </div>
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <table class="table table-light table-borderless table-hover text-center mb-0">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Product Id</th>
+                    <th>Product Image</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product:${productList}">
+                    <td class="align-middle" th:text="${product.getId()}"></td>
+                    <td class="align-middle"><img th:src="@{/product/image/{id}(id=${product.getId()})}" style="width: 50px;"></td>
+                    <td class="align-middle" th:text="${product.getName()}"></td>
+                    <td class="align-middle" th:text="${product.getProductCategory()}"></td>
+                    <td class="align-middle" th:text="${product.getPrice()}"></td>
+                    <td class="align-middle" th:text="${product.getQuantity()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+                <!-- Footer Start -->
+<div class="container-fluid bg-dark text-secondary mt-5 pt-5">
+    <div class="row px-xl-5 pt-5">
+        <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+            <h5 class="text-secondary text-uppercase mb-4">Get In Touch</h5>
+            <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Decagon Institute</p>
+            <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>osazuwa.omosigho@decagon.dev</p>
+            <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+234 809 572 7920</p>
+        </div>
+    </div>
+    <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
+        <div class="col-md-6 px-xl-0">
+            <p class="mb-md-0 text-center text-md-left text-secondary">
+                &copy; <a class="text-primary" href="#">Domain</a>. All Rights Reserved. Designed
+                by
+                <a class="text-primary" href="">Osazuwa Omosigho</a>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- Footer End -->
+
+
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+<!-- Other HTML code here -->
+<input type="hidden" id="adminStatus" th:value="${AdminStatus}" />
+<script>
+    var adminStatus = document.getElementById("adminStatus").value;
+    if (adminStatus != null && adminStatus !== "") {
+        swal({
+            text: adminStatus,
+            button: false,
+            timer: 2000,
+            width: "30rem",
+            padding: "2rem",
+        });
+    }
+</script>
+
+<input type="hidden" id="userStatus" th:value="${userStatus}" />
+<script>
+    var userStatus = document.getElementById("userStatus").value;
+    if (userStatus != null && userStatus !== "") {
+        swal({
+            text: userStatus,
+            button: false,
+            timer: 2000,
+            width: "30rem",
+            padding: "2rem",
+        });
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<!-- Libraries Javascript -->
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/lib/easing/easing.min.js}"></script>
+<script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
+<script th:src="@{/mail/jqBootstrapValidation.min.js}"></script>
+
+</body>
+
+</html>

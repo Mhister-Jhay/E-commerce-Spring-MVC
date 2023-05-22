@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Jhay Commerce | registration</title>
+	<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/all.css'>
+	<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css'>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+	<link rel="stylesheet" th:href="@{/css/registration.css}">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+<body>
+	<div class="main">
+		<!-- Sign up form -->
+		<section class="signup">
+			<div class="screen__content mb-4">
+				<a th:href="@{/}" class="text-decoration-none">
+					<span class="h1 text-uppercase text-primary bg-dark px-2 font-weight-bold">Jhay</span>
+					<span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1 font-weight-bold">Commerce</span>
+				</a>
+			</div>
+			<div class="screen">
+					<div class="screen__content">
+						<form method="post" th:action="@{/registerUser}" th:object="${storeUserForm}" class="register-form" id="register-form">
+							<h2 class="form-title">Create New Account</h2>
+							<div class="signup">
+								<span class="signup__text">Already have an account?</span>
+								<a th:href="@{/login}" class="button signup__button">
+									<span class="button__text">Login</span>
+									<i class="button__icon fas fa-chevron-right"></i>
+								</a>
+							</div>
+							<div class="form-group">
+								<i class="login__icon fas fa-user"></i>
+								<label for="first_name"></label><input type="text" class="login__input" th:field="*{firstName}" name="firstName" id="first_name" placeholder="first name" />
+							</div>
+							<div class="form-group">
+								<i class="login__icon fas fa-user"></i>
+								<label for="last_name"></label><input type="text" class="login__input"  th:field="*{lastName}" name="lastName" id="last_name" placeholder="last name" />
+							</div>
+							<div class="form-group">
+								<i class="login__icon fas fa-user"></i>
+								<label for="phone_number"></label><input type="text" class="login__input"  th:field="*{phoneNumber}" name="phoneNumber" id="phone_number" placeholder="Phone Number" />
+							</div>
+							<div class="form-group">
+								<i class="login__icon fas fa-user"></i>
+								<label for="email"></label><input type="email" class="login__input"  th:field="*{email}" name="email" id="email" placeholder="Email" />
+							</div>
+							<div class="form-group">
+								<i class="login__icon fas fa-lock"></i>
+								<label for="password"></label><input type="password" class="login__input"  th:field="*{password}" name="password" id="password" placeholder="Password" />
+							</div>
+							<div class="form-group">
+								<i class="login__icon fas fa-lock"></i>
+								<label for="re_password"></label><input type="password" class="login__input" th:field="*{confirmPassword}" name="confirmPassword" id="re_password" placeholder="Repeat password" />
+							</div>
+								<button type="submit" class="button login__submit">
+									<span class="button__text">Register</span>
+									<i class="button__icon fas fa-chevron-right"></i>
+								</button>
+							</form>
+					</div>
+				</div>
+		</section>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	</div>
+
+	<input type="hidden" id="userStatus" th:value="${userStatus}" />
+	<script>
+		var userStatus = document.getElementById("userStatus").value;
+		if (userStatus != null && userStatus !== "") {
+			swal({
+				text: userStatus,
+				button: false,
+				timer: 2000,
+				width: "30rem",
+				padding: "2rem",
+			});
+		}
+	</script>
+</body>
+</html>
